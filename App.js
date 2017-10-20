@@ -11,6 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
+import MapView from 'react-native-maps';
 
 import {NavigationBar} from './components';
 
@@ -33,6 +34,15 @@ export default class App extends Component<{}> {
         <Text style={styles.instructions}>
           {instructions}
         </Text>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+          latitude: 37.67889641679633,
+          longitude: 127.0784050666653,
+          latitudeDelta: 0.00222,
+          longitudeDelta: 0.00221,
+          }}
+        />
         
       </View>
     );
@@ -56,4 +66,8 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  map : {
+    height: 400,
+    width: 400,
+  }
 });
