@@ -12,8 +12,9 @@ import {
   View
 } from 'react-native';
 import MapView from 'react-native-maps';
+import SideMenu from 'react-native-side-menu';
 
-import {NavigationBar} from './components';
+import {NavigationBar, SideBar} from './components';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -22,32 +23,43 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-export default class App extends Component<{}> {
+class ContentView extends Component<{}> {
+
   render() {
     return (
-
-      <View>
-        <NavigationBar/>
-        <Text style={styles.welcome}>
-          React Native로 서울 공공앱 개발중
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-          latitude: 37.67889641679633,
-          longitude: 127.0784050666653,
-          latitudeDelta: 0.00222,
-          longitudeDelta: 0.00221,
-          }}
-        />
-        
-      </View>
+      
+        <View>
+          <NavigationBar/>
+          <Text style={styles.welcome}>
+            React Native로 서울 공공앱 개발중
+          </Text>
+          <Text style={styles.instructions}>
+            {instructions}
+          </Text>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+            latitude: 37.67889641679633,
+            longitude: 127.0784050666653,
+            latitudeDelta: 0.03222,
+            longitudeDelta: 0.03221,
+            }}
+          />
+        </View>
     );
   }
 }
+export default class App extends Component<{}> {
+    
+    render() {
+      const menu = <SideBar navigator={navigator}/>;
+      return (
+        <SideMenu menu={menu}>
+          <ContentView/>
+        </SideMenu>
+      );
+    }
+  }
 
 const styles = StyleSheet.create({
   container: {
