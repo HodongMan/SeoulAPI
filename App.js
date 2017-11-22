@@ -9,7 +9,8 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Alert
 } from 'react-native';
 import MapView from 'react-native-maps';
 import SideMenu from 'react-native-side-menu';
@@ -25,7 +26,37 @@ const instructions = Platform.select({
 
 class ContentView extends Component<{}> {
 
+  constructor(props){
+    super(props);
+
+    this.state = {
+      courseData : [],
+      courseName : ""
+    }
+  }
+
+  componentDidMount(){
+
+    fetch("https://mplatform.seoul.go.kr/api/dule/courseInfo.do?course=3")
+    .then((response) => response.json())
+    .then((responseJson) => {
+        this.setState({
+            courseData : responseJson.body,
+            coruseName : responseJson.body[0].THM_THEME_NAME
+        });
+        Alert.alert(this.state.courseData[0].COT_MBR_MAX_Y);
+
+    })
+    .catch(error => console.log(error));
+  }
+
   render() {
+    if (this.state.courseData.length == 0) {
+      return (
+        <View><Text>Loading...</Text></View>
+      );
+    }
+    
     return (
       
         <View>
@@ -39,12 +70,26 @@ class ContentView extends Component<{}> {
           <MapView
             style={styles.map}
             initialRegion={{
-            latitude: 37.67889641679633,
-            longitude: 127.0784050666653,
-            latitudeDelta: 0.03222,
-            longitudeDelta: 0.03221,
+              latitude: parseFloat(this.state.courseData[0].COT_MBR_MAX_Y),
+              longitude: parseFloat(this.state.courseData[0].COT_MBR_MAX_X),
+              latitudeDelta: 0.51222,
+              longitudeDelta: 0.51221,
             }}
-          />
+            
+          >
+            {this.state.courseData.map((marker, index) => (
+              <MapView.Marker
+                coordinate={
+                  {
+                   latitude: parseFloat(marker.COT_MBR_MAX_Y),
+                   longitude: parseFloat(marker.COT_MBR_MAX_X),
+                 }
+                 
+                }
+                key={index}
+              />
+            ))}
+          </MapView>
         </View>
     );
   }
